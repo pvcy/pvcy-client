@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pyPVCY"
+name = "pvcy-client"
 version = "0.1.0"
 description = "A Python API client and CLI for the Privacy Dynamics API."
 authors = ["Ted Conbeer <tconbeer@users.noreply.github.com>"]
