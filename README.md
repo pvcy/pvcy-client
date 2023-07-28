@@ -1,4 +1,4 @@
-# pyPVCY: A Python Client for the Privacy Dynamics API
+# pvcy-client: A Python Client for the Privacy Dynamics API
 
 This project provides a Python Client for the Privacy Dynamics API. To
 use this client, you will need a Privacy Dynamics account with API access
@@ -7,7 +7,7 @@ enabled.
 ## Installation
 
 ```sh
-pip install pyPVCY
+pip install pvcy-client
 ```
 
 ## Getting Started
