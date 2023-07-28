@@ -1,0 +1,130 @@
+{
+    "connections": [
+        {
+            "account": "abc1234",
+            "connection_id": "bbdcef29-4d06-452d-9b25-592c96a2351c",
+            "connection_name": "snow test",
+            "created": 1685740191,
+            "database": "RAW_SENSITIVE",
+            "input_type": "snowflake",
+            "updated": 1688058595,
+            "user": "SVC_PVCY",
+            "warehouse": ""
+        },
+        {
+            "connection_id": "f3319ab4-ad6d-49e7-9d13-69efa3185c7a",
+            "connection_name": "PG Test",
+            "created": 1687971540,
+            "database": "postgres",
+            "host": "foo.bar.us-west-1.rds.amazonaws.com",
+            "input_type": "postgres",
+            "port": "5432",
+            "updated": 1687971540,
+            "username": "postgres"
+        },
+        {
+            "aws_access_key_id": "GOOG123ABC",
+            "connection_id": "747e9321-d130-4e15-a495-285beca333b0",
+            "connection_name": "GCS Test",
+            "created": 1687810998,
+            "endpoint_url": "https://storage.googleapis.com",
+            "input_type": "s3",
+            "region_name": "us-west1",
+            "updated": 1687811147
+        },
+        {
+            "connection_id": "d431552e-a986-4dda-88f3-f2024d8f6bcf",
+            "connection_name": "Test Aurora MySQL + SSH",
+            "created": 1687377083,
+            "host": "mysql-aurora-ssh-test.foo.us-west-2.rds.amazonaws.com",
+            "input_type": "mysql",
+            "port": "3306",
+            "ssh_tunnel": {
+                "host": "ec2-11-111-111-11.us-west-2.compute.amazonaws.com",
+                "port": "22",
+                "username": "ec2-user"
+            },
+            "updated": 1687377083,
+            "username": "svc_pvcy"
+        },
+        {
+            "connection_id": "d51af5d0-706e-40bb-9073-e86bf98a33e6",
+            "connection_name": "Test PG + SSH",
+            "created": 1686775676,
+            "database": "postgres",
+            "host": "foo.bar.us-west-2.rds.amazonaws.com",
+            "input_type": "postgres",
+            "port": "5432",
+            "ssh_tunnel": {
+                "host": "ec2-11-111-111-11.us-west-2.compute.amazonaws.com",
+                "port": "22",
+                "username": "ec2-user"
+            },
+            "updated": 1686775676,
+            "username": "svc_pvcy"
+        },
+        {
+            "connection_id": "6d2431e4-e4f4-4ef2-9fb6-43a78af4b1a1",
+            "connection_name": "CloudSQL Test",
+            "created": 1686083732,
+            "database": "svc_pvcy",
+            "host": "11.111.111.111",
+            "input_type": "postgres",
+            "port": "5432",
+            "updated": 1686083732,
+            "username": "svc_pvcy"
+        },
+        {
+            "bigquery_project_id": "bq-demo-369315",
+            "connection_id": "58d910ba-62b9-43cd-84f5-dae659b816f0",
+            "connection_name": "BigQuery Test",
+            "created": 1669045998,
+            "input_type": "bigquery",
+            "updated": 1669739292
+        },
+        {
+            "aws_access_key_id": "AKIA123ABC",
+            "connection_id": "429ccfc4-de21-46ed-b2ee-fafe36af1c34",
+            "connection_name": "s3test",
+            "created": 1652969020,
+            "input_type": "s3",
+            "region_name": "us-west-2",
+            "updated": 1661293509
+        },
+        {
+            "connection_id": "97f1d45c-834f-4337-b251-6f5c74bebac3",
+            "connection_name": "mysql-test",
+            "created": 1657807147,
+            "host": "foo.bar.us-west-2.rds.amazonaws.com",
+            "input_type": "mysql",
+            "port": "3306",
+            "updated": 1657807147,
+            "username": "svc_pvcy"
+        },
+        {
+            "connection_id": "a8642904-3227-4bfc-9381-593c62e07f9f",
+            "connection_name": "Redshift Test",
+            "created": 1644968882,
+            "database": "privacy_testing",
+            "host": "foo.bar.us-west-2.redshift.amazonaws.com",
+            "input_type": "redshift",
+            "port": "5439",
+            "updated": 1644968882,
+            "username": "svc_pvcy"
+        },
+        {
+            "connection_id": "bd372190-430c-4d0e-b0a1-603c17d08cfd",
+            "connection_name": "Postgres Testing",
+            "created": 1641831667,
+            "database": "privacy_testing",
+            "host": "foo.bar.us-west-2.rds.amazonaws.com",
+            "input_type": "postgres",
+            "port": "5432",
+            "updated": 1641831667,
+            "username": "svc_pvcy"
+        }
+    ],
+    "request_id": "594e61c1080770640eb2e35dc6e9d6c4",
+    "processing_time": "0.001s",
+    "request_timestamp": 1688061882
+}

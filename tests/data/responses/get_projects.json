@@ -1,0 +1,216 @@
+{
+   "projects":[
+      {
+         "auto_create_job_definitions":false,
+         "created":1684794626,
+         "days_expire":"None",
+         "default_job_run_type":"load_treat_write",
+         "destination_connection":{
+            "connection_id":"a4e0411f-c726-45b3-802f-2307e6d85f8c",
+            "connection_input_type":"snowflake",
+            "connection_name":"Demo PRIVACY_SAFE (AWS)",
+            "database":"PRIVACY_SAFE"
+         },
+         "destination_namespace":{
+            "schema":"FITNESS"
+         },
+         "did_default_treatment_method":"hide",
+         "job_definitions":[
+            
+         ],
+         "origin_connection":{
+            "connection_id":"545b9338-fe6c-4ec1-bee2-bc587bf4f48c",
+            "connection_input_type":"snowflake",
+            "connection_name":"Demo RAW_SENSITIVE (AWS)",
+            "database":"RAW_SENSITIVE"
+         },
+         "origin_namespace":{
+            "schema":"FITNESS"
+         },
+         "project_id":"a6f3ce2f-9458-4288-93cc-cfcaa4e08a63",
+         "project_owner":"temp owner",
+         "project_title":"demo",
+         "qid_anonymize":true,
+         "risk_levels":"None",
+         "schedule":"None",
+         "updated":1684794626
+      },
+      {
+         "auto_create_job_definitions":false,
+         "created":1684518702,
+         "days_expire":"None",
+         "default_job_run_type":"load_treat_write",
+         "destination_connection":{
+            "connection_id":"2f670557-1e49-4292-9113-26d28ae71395",
+            "connection_input_type":"snowflake",
+            "connection_name":"Demo Analytics (RAW_SAFE)",
+            "database":"RAW_SAFE"
+         },
+         "destination_namespace":{
+            "schema":"APP"
+         },
+         "did_default_treatment_method":"fake",
+         "job_definitions":[
+            
+         ],
+         "origin_connection":{
+            "connection_id":"1e8dbe3b-1967-49b5-8a99-9958ce991519",
+            "connection_input_type":"snowflake",
+            "connection_name":"Demo Analytics (RAW)",
+            "database":"RAW"
+         },
+         "origin_namespace":{
+            "schema":"APP"
+         },
+         "project_id":"48ce4248-4a69-403a-adab-9e8fa3464d31",
+         "project_owner":"temp owner",
+         "project_title":"Demo Analytics",
+         "qid_anonymize":true,
+         "risk_levels":"None",
+         "schedule":"None",
+         "updated":1684518702
+      },
+      {
+         "auto_create_job_definitions":false,
+         "created":1675271341,
+         "days_expire":"None",
+         "default_job_run_type":"load_treat_write",
+         "destination_connection":{
+            "connection_id":"429ccfc4-de21-46ed-b2ee-fafe36af1c34",
+            "connection_input_type":"s3",
+            "connection_name":"s3test",
+            "database":"S3"
+         },
+         "destination_namespace":{
+            "bucket":"privacy-dynamics-sample",
+            "prefix":"/output/"
+         },
+         "did_default_treatment_method":"hide",
+         "job_definitions":[
+            
+         ],
+         "origin_connection":{
+            "connection_id":"429ccfc4-de21-46ed-b2ee-fafe36af1c34",
+            "connection_input_type":"s3",
+            "connection_name":"s3test",
+            "database":"S3"
+         },
+         "origin_namespace":{
+            "bucket":"privacy-dynamics-sample",
+            "prefix":""
+         },
+         "project_id":"814717f4-1a86-40c4-9dc4-ec53806553bc",
+         "project_owner":"temp owner",
+         "project_title":"s3 Test Project",
+         "qid_anonymize":true,
+         "risk_levels":"None",
+         "schedule":"None",
+         "updated":1675271341
+      },
+      {
+         "auto_create_job_definitions":false,
+         "created":1669920506,
+         "days_expire":"None",
+         "default_job_run_type":"load_treat_write",
+         "destination_connection":{
+            "connection_id":"bd372190-430c-4d0e-b0a1-603c17d08cfd",
+            "connection_input_type":"postgres",
+            "connection_name":"Postgres Testing",
+            "database":"privacy_testing"
+         },
+         "destination_namespace":{
+            "schema":"foo"
+         },
+         "did_default_treatment_method":"hide",
+         "job_definitions":[
+            
+         ],
+         "origin_connection":{
+            "connection_id":"bd372190-430c-4d0e-b0a1-603c17d08cfd",
+            "connection_input_type":"postgres",
+            "connection_name":"Postgres Testing",
+            "database":"privacy_testing"
+         },
+         "origin_namespace":{
+            "schema":"public"
+         },
+         "project_id":"2ce9bfdb-8cb6-4ed3-a129-068d2f018b8d",
+         "project_owner":"temp owner",
+         "project_title":"Postgres Test Project",
+         "qid_anonymize":true,
+         "risk_levels":"None",
+         "schedule":"None",
+         "updated":1669920506
+      },
+      {
+         "auto_create_job_definitions":false,
+         "created":1645046317,
+         "days_expire":"None",
+         "default_job_run_type":"load_treat_write",
+         "destination_connection":{
+            "connection_id":"a8642904-3227-4bfc-9381-593c62e07f9f",
+            "connection_input_type":"redshift",
+            "connection_name":"Redshift",
+            "database":"privacy_testing"
+         },
+         "destination_namespace":{
+            "schema":"destination_schema"
+         },
+         "did_default_treatment_method":"hide",
+         "job_definitions":[
+            
+         ],
+         "origin_connection":{
+            "connection_id":"a8642904-3227-4bfc-9381-593c62e07f9f",
+            "connection_input_type":"redshift",
+            "connection_name":"Redshift",
+            "database":"privacy_testing"
+         },
+         "origin_namespace":{
+            "schema":"origin_schema"
+         },
+         "project_id":"bf2f4075-7119-43c3-abe0-b2737b83594a",
+         "project_owner":"temp owner",
+         "project_title":"Ad hoc",
+         "qid_anonymize":true,
+         "risk_levels":"None",
+         "schedule":"None",
+         "updated":1652966590
+      },
+      {
+         "auto_create_job_definitions":false,
+         "created":1643661560,
+         "days_expire":"None",
+         "default_job_run_type":"load_treat_write",
+         "destination_connection":{
+            "connection_id":"36155571-9843-4aae-8d45-0d664880a006",
+            "connection_input_type":"bigquery",
+            "connection_name":"privacy-dynamics-testing",
+            "database":"None"
+         },
+         "destination_namespace":{
+            "dataset":"LYNN_TEST_DEST"
+         },
+         "did_default_treatment_method":"hide",
+         "job_definitions":[
+            
+         ],
+         "origin_connection":{
+            "connection_id":"36155571-9843-4aae-8d45-0d664880a006",
+            "connection_input_type":"bigquery",
+            "connection_name":"privacy-dynamics-testing",
+            "database":"None"
+         },
+         "origin_namespace":{
+            "dataset":"LYNN_TEST"
+         },
+         "project_id":"f5188f24-6342-4b26-bba2-f7e9ce339b9c",
+         "project_owner":"temp owner",
+         "project_title":"Ad hoc",
+         "qid_anonymize":true,
+         "risk_levels":"None",
+         "schedule":"None",
+         "updated":1652966590
+      }
+    ]
+}

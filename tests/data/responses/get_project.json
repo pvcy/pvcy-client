@@ -1,0 +1,40 @@
+{
+    "processing_time":"0.01955s",
+    "project":{
+       "auto_create_job_definitions":false,
+       "created":1657299627,
+       "days_expire":"None",
+       "default_job_run_type":"load_treat_write",
+       "destination_connection":{
+          "connection_id":"a4e0411f-c726-45b3-802f-2307e6d85f8c",
+          "connection_input_type":"snowflake",
+          "connection_name":"Test Snowflake DEST",
+          "database":"DEST"
+       },
+       "destination_namespace":{
+          "schema":"FOO"
+       },
+       "did_default_treatment_method":"hide",
+       "job_definitions":[
+          
+       ],
+       "origin_connection":{
+          "connection_id":"545b9338-fe6c-4ec1-bee2-bc587bf4f48c",
+          "connection_input_type":"snowflake",
+          "connection_name":"Test Snowflake ORG",
+          "database":"ORG"
+       },
+       "origin_namespace":{
+          "schema":"BAR"
+       },
+       "project_id":"9f8ccbcc-0441-4101-833f-c2bebdb3a526",
+       "project_owner":"John Smith",
+       "project_title":"My Project",
+       "qid_anonymize":true,
+       "risk_levels":"None",
+       "schedule":"None",
+       "updated":1682546341
+    },
+    "request_id":"1786cfd77d34df2da6e5122bba0f799a",
+    "request_timestamp":1684965290
+ }

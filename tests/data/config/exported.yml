@@ -1,0 +1,302 @@
+version: 1
+projects:
+  - project_title: Ad hoc
+    project_id: bf2f4075-7119-43c3-abe0-b2737b83594a
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class:
+          city:
+            treatment_method: anonymize
+            pii_class:
+          dob:
+            treatment_method: anonymize
+            pii_class:
+          dod:
+            treatment_method: anonymize
+            pii_class:
+          ethnicity:
+            treatment_method: anonymize
+            pii_class:
+          gender:
+            treatment_method: anonymize
+            pii_class:
+          hispanic:
+            treatment_method: anonymize
+            pii_class:
+          language:
+            treatment_method: anonymize
+            pii_class:
+          marital_status:
+            treatment_method: anonymize
+            pii_class:
+          patient_id:
+            treatment_method: mask
+            pii_class:
+          religion:
+            treatment_method: anonymize
+            pii_class:
+          state:
+            treatment_method: anonymize
+            pii_class:
+          zip:
+            treatment_method: anonymize
+            pii_class:
+  - project_title: Ad hoc
+    project_id: f5188f24-6342-4b26-bba2-f7e9ce339b9c
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class:
+          city:
+            treatment_method: anonymize
+            pii_class:
+          dob:
+            treatment_method: anonymize
+            pii_class:
+          dod:
+            treatment_method: anonymize
+            pii_class:
+          ethnicity:
+            treatment_method: anonymize
+            pii_class:
+          gender:
+            treatment_method: anonymize
+            pii_class:
+          hispanic:
+            treatment_method: anonymize
+            pii_class:
+          language:
+            treatment_method: anonymize
+            pii_class:
+          marital_status:
+            treatment_method: anonymize
+            pii_class:
+          patient_id:
+            treatment_method: mask
+            pii_class:
+          religion:
+            treatment_method: anonymize
+            pii_class:
+          state:
+            treatment_method: anonymize
+            pii_class:
+          zip:
+            treatment_method: anonymize
+            pii_class:
+  - project_title: Demo Analytics
+    project_id: 48ce4248-4a69-403a-adab-9e8fa3464d31
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class:
+          city:
+            treatment_method: anonymize
+            pii_class:
+          dob:
+            treatment_method: anonymize
+            pii_class:
+          dod:
+            treatment_method: anonymize
+            pii_class:
+          ethnicity:
+            treatment_method: anonymize
+            pii_class:
+          gender:
+            treatment_method: anonymize
+            pii_class:
+          hispanic:
+            treatment_method: anonymize
+            pii_class:
+          language:
+            treatment_method: anonymize
+            pii_class:
+          marital_status:
+            treatment_method: anonymize
+            pii_class:
+          patient_id:
+            treatment_method: mask
+            pii_class:
+          religion:
+            treatment_method: anonymize
+            pii_class:
+          state:
+            treatment_method: anonymize
+            pii_class:
+          zip:
+            treatment_method: anonymize
+            pii_class:
+  - project_title: Postgres Test Project
+    project_id: 2ce9bfdb-8cb6-4ed3-a129-068d2f018b8d
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class:
+          city:
+            treatment_method: anonymize
+            pii_class:
+          dob:
+            treatment_method: anonymize
+            pii_class:
+          dod:
+            treatment_method: anonymize
+            pii_class:
+          ethnicity:
+            treatment_method: anonymize
+            pii_class:
+          gender:
+            treatment_method: anonymize
+            pii_class:
+          hispanic:
+            treatment_method: anonymize
+            pii_class:
+          language:
+            treatment_method: anonymize
+            pii_class:
+          marital_status:
+            treatment_method: anonymize
+            pii_class:
+          patient_id:
+            treatment_method: mask
+            pii_class:
+          religion:
+            treatment_method: anonymize
+            pii_class:
+          state:
+            treatment_method: anonymize
+            pii_class:
+          zip:
+            treatment_method: anonymize
+            pii_class:
+  - project_title: demo
+    project_id: a6f3ce2f-9458-4288-93cc-cfcaa4e08a63
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class:
+          city:
+            treatment_method: anonymize
+            pii_class:
+          dob:
+            treatment_method: anonymize
+            pii_class:
+          dod:
+            treatment_method: anonymize
+            pii_class:
+          ethnicity:
+            treatment_method: anonymize
+            pii_class:
+          gender:
+            treatment_method: anonymize
+            pii_class:
+          hispanic:
+            treatment_method: anonymize
+            pii_class:
+          language:
+            treatment_method: anonymize
+            pii_class:
+          marital_status:
+            treatment_method: anonymize
+            pii_class:
+          patient_id:
+            treatment_method: mask
+            pii_class:
+          religion:
+            treatment_method: anonymize
+            pii_class:
+          state:
+            treatment_method: anonymize
+            pii_class:
+          zip:
+            treatment_method: anonymize
+            pii_class:
+  - project_title: s3 Test Project
+    project_id: 814717f4-1a86-40c4-9dc4-ec53806553bc
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class:
+          city:
+            treatment_method: anonymize
+            pii_class:
+          dob:
+            treatment_method: anonymize
+            pii_class:
+          dod:
+            treatment_method: anonymize
+            pii_class:
+          ethnicity:
+            treatment_method: anonymize
+            pii_class:
+          gender:
+            treatment_method: anonymize
+            pii_class:
+          hispanic:
+            treatment_method: anonymize
+            pii_class:
+          language:
+            treatment_method: anonymize
+            pii_class:
+          marital_status:
+            treatment_method: anonymize
+            pii_class:
+          patient_id:
+            treatment_method: mask
+            pii_class:
+          religion:
+            treatment_method: anonymize
+            pii_class:
+          state:
+            treatment_method: anonymize
+            pii_class:
+          zip:
+            treatment_method: anonymize
+            pii_class:

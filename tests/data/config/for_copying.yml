@@ -1,0 +1,79 @@
+version: 1
+projects:
+  - project_title: My Source Project
+    project_id: c132b205-4d88-47c8-af4d-884d8f17df15
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 50
+        schedule: 5 4 * * *
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class: age
+          city:
+            treatment_method: anonymize
+            pii_class: city
+          dob:
+            treatment_method: anonymize
+            pii_class: birth_date
+          dod:
+            treatment_method: anonymize
+            pii_class: death_date
+          ethnicity:
+            treatment_method: anonymize
+            pii_class: generic_category
+          gender:
+            treatment_method: anonymize
+            pii_class: gender
+          hispanic:
+            treatment_method: anonymize
+            pii_class: generic_category
+          language:
+            treatment_method: anonymize
+            pii_class: generic_category
+          marital_status:
+            treatment_method: anonymize
+            pii_class: generic_category
+          patient_id:
+            treatment_method: mask
+            pii_class: generic_did
+          religion:
+            treatment_method: anonymize
+            pii_class: generic_category
+          state:
+            treatment_method: anonymize
+            pii_class: us_state
+          zip:
+            treatment_method: anonymize
+            pii_class: us_zipcode
+  - project_title: My New Empty Project
+    project_id: 47332635-c555-496a-b20b-303914e9230c
+    job_definitions: []
+  - project_title: My Incomplete Project
+    project_id: 105d0358-cb82-4549-a93d-33d436a6118b
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 5b0b58b8-43ca-46e0-a8d8-6cdc0a7e5ab7
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 2
+        schedule:
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class: age
+          city:
+            treatment_method: anonymize
+            pii_class: city
+      - table_name: my_other_table
+        job_definition_id: ac4c1e0f-d00a-41a5-8e53-13b2837e7dca
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 5
+        schedule: 5 * * * *

@@ -1,0 +1,13 @@
+{
+    "connection":{
+       "account":"abc1234",
+       "connection_id":"bbdcef29-4d06-452d-9b25-592c96a2351c",
+       "connection_name":"snow test",
+       "created":1685740191,
+       "database":"RAW_SENSITIVE",
+       "input_type":"snowflake",
+       "updated":1688058595,
+       "user":"SVC_PVCY",
+       "warehouse":""
+    }
+}

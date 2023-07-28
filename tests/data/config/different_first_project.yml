@@ -1,0 +1,52 @@
+version: 1
+projects:
+  - project_title: Ad hoc
+    project_id: bf2f4075-7119-43c3-abe0-b2737b83594a
+    job_definitions:
+      - table_name: my_table
+        job_definition_id: 8d06c1df-26b3-4230-a62c-6df128ac7c58
+        enabled: true
+        job_run_type: load_treat_write
+        k_strategy: anonymize
+        k_target: 50
+        schedule: 5 4 * * *
+        column_config:
+          age:
+            treatment_method: anonymize
+            pii_class: age
+          city:
+            treatment_method: anonymize
+            pii_class: city
+          dob:
+            treatment_method: anonymize
+            pii_class: birth_date
+          dod:
+            treatment_method: anonymize
+            pii_class: death_date
+          ethnicity:
+            treatment_method: anonymize
+            pii_class: generic_category
+          gender:
+            treatment_method: anonymize
+            pii_class: gender
+          hispanic:
+            treatment_method: anonymize
+            pii_class: generic_category
+          language:
+            treatment_method: anonymize
+            pii_class: generic_category
+          marital_status:
+            treatment_method: anonymize
+            pii_class: generic_category
+          patient_id:
+            treatment_method: mask
+            pii_class: generic_did
+          religion:
+            treatment_method: anonymize
+            pii_class: generic_category
+          state:
+            treatment_method: anonymize
+            pii_class: us_state
+          zip:
+            treatment_method: anonymize
+            pii_class: us_zipcode
