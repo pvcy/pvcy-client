@@ -16,6 +16,7 @@ import logging
 import shutil
 from pathlib import Path
 from typing import List, Tuple, TypeVar, Union
+from uuid import UUID
 
 import click
 
@@ -142,7 +143,7 @@ def _validate_file_path(_, __, value: Union[Path, None]) -> Path:  # type: ignor
     help=(
         "The base URL for all API calls. Can be provided as the "
         "environment variable PVCY_BASE_URL instead of being passed into the "
-        "class constructor. Defaults to https://api.privacydynamics.io."
+        "CLI. Defaults to https://api.privacydynamics.io."
     ),
 )
 @click.option(
@@ -159,7 +160,7 @@ def _validate_file_path(_, __, value: Union[Path, None]) -> Path:  # type: ignor
     help=(
         "The client_id for an OAuth2 client-credentials "
         "flow. Can be provided as the environment variable PVCY_CLIENT_ID "
-        "instead of being passed into the class constructor."
+        "instead of being passed into the CLI."
     ),
 )
 @click.option(
@@ -167,7 +168,7 @@ def _validate_file_path(_, __, value: Union[Path, None]) -> Path:  # type: ignor
     help=(
         "The client_secret for an OAuth2 client-credentials "
         "flow. Can be provided as the environment variable PVCY_CLIENT_SECRET "
-        "instead of being passed into the class constructor."
+        "instead of being passed into the CLI."
     ),
 )
 @click.option(
@@ -175,7 +176,7 @@ def _validate_file_path(_, __, value: Union[Path, None]) -> Path:  # type: ignor
     help=(
         "The identity claim's intended audience for an OAuth2 "
         "client-credentials flow. Can be provided as the environment variable "
-        "PVCY_AUDIENCE instead of being passed into the class constructor. Defaults "
+        "PVCY_AUDIENCE instead of being passed into the CLI. Defaults "
         "to https://api.privacydynamics.io."
     ),
 )
@@ -184,7 +185,7 @@ def _validate_file_path(_, __, value: Union[Path, None]) -> Path:  # type: ignor
     help=(
         "The identity provider domain for an OAuth2 "
         "client-credentials flow. Can be provided as the environment variable "
-        "PVCY_IDP_DOMAIN instead of being passed into the class constructor. "
+        "PVCY_IDP_DOMAIN instead of being passed into the CLI. "
         "Defaults to https://auth.privacydynamics.io."
     ),
 )
@@ -342,8 +343,17 @@ def sync(ctx: click.Context, path: Path, only: List[str]) -> None:
     pvcy_client = _build_client_from_ctx(ctx)
     logging.info("Fetching project and dataset state.")
     state = _build_project_configs_from_api_state(client=pvcy_client)
-    if only:
-        state = [p for p in state if str(p.project_id) in only]
+    only_sync_ids = [UUID(s) for s in only]
+    if only_sync_ids:
+        state = [p for p in state if p.project_id in only_sync_ids]
+
+    if only and len(state) < len(only):
+        logging.error(
+            "--only option provided with Project ID that could not be found in the "
+            "API. Found the following matching projects: "
+            f"{[p.project_id for p in state]}"
+        )
+        ctx.exit(2)
 
     logging.info("Merging configs with state.")
     only_cfg_projects, only_state_projects, intersection_projects = _diff_lists(
@@ -351,7 +361,7 @@ def sync(ctx: click.Context, path: Path, only: List[str]) -> None:
     )
     # Note: Cannot currently add projects through a the API; detect projects
     # added in the config file and make a backup.
-    if only_cfg_projects:
+    if only_cfg_projects and not only_sync_ids:
         backup_path = path.with_stem(path.stem + "__backup")
         logging.warning(
             "Found config for projects that could not be found in the API. "
@@ -364,6 +374,8 @@ def sync(ctx: click.Context, path: Path, only: List[str]) -> None:
         shutil.copyfile(path, backup_path)
 
     merged: List[ProjectConfig] = only_state_projects
+    if only_sync_ids:
+        merged.extend(only_cfg_projects)
     for project in intersection_projects:
         [project_state] = [p for p in state if p.project_id == project.project_id]
         if project_state.job_definitions and not project.job_definitions:
@@ -380,7 +392,7 @@ def sync(ctx: click.Context, path: Path, only: List[str]) -> None:
         logging.info("Updating account state from config file.")
         # can't create projects or update project metadata; just update job definitions
         for project in merged:
-            if only and str(project.project_id) not in only:
+            if only_sync_ids and project.project_id not in only_sync_ids:
                 continue
             # todo: check to see if project was changed; skip API update if
             # it is the same
@@ -450,12 +462,14 @@ def copy(ctx: click.Context, path: Path, source: str, destination: List[str]) ->
     logging.info(f"Loading config from file at {path}.")
     raw_config = yaml_serializer.load(path)
     config = ConfigFile(**raw_config)
+    source_uuid = UUID(source)
+    destination_uuids = [UUID(d) for d in destination]
 
-    project_ids = [str(p.project_id) for p in config.projects]
+    project_ids = [p.project_id for p in config.projects]
     logging.debug(f"Found config for projects: {project_ids}")
-    if source not in project_ids:
+    if source_uuid not in project_ids:
         logging.error(
-            f"No config was found at {path} for the project with ID: {source}. "
+            f"No config was found at {path} for the project with ID: {source_uuid}. "
             f"Cannot copy nonexistent config. Check for typos, or "
             f"run `pvcy export` or `pvcy sync` first."
         )
@@ -466,12 +480,12 @@ def copy(ctx: click.Context, path: Path, source: str, destination: List[str]) ->
         [source_proj] = [
             p.model_copy(deep=True)
             for p in config.projects
-            if str(p.project_id) == source
+            if p.project_id == source_uuid
         ]
         for jd in source_proj.job_definitions:
             jd.job_definition_id = None
 
-    for dest_id in destination:
+    for dest_id in destination_uuids:
         if dest_id not in project_ids:
             logging.error(
                 f"No config was found at {path} for the project with ID: {dest_id}. "
@@ -481,13 +495,13 @@ def copy(ctx: click.Context, path: Path, source: str, destination: List[str]) ->
             )
             ctx.exit(1)
 
-    dest_projects = [p for p in config.projects if str(p.project_id) in destination]
+    dest_projects = [p for p in config.projects if p.project_id in destination_uuids]
     logging.debug(f"Overwriting config for these projects: {dest_projects}")
     unchanged_projects = [
-        p for p in config.projects if str(p.project_id) not in destination
+        p for p in config.projects if p.project_id not in destination_uuids
     ]
     for dest_proj in dest_projects:
-        logging.info(f"Copying config from {source} to {dest_proj.project_id}.")
+        logging.info(f"Copying config from {source_uuid} to {dest_proj.project_id}.")
         if source_proj.job_definitions and not dest_proj.job_definitions:
             dest_proj.job_definitions = source_proj.job_definitions
         elif dest_proj.job_definitions and source_proj.job_definitions:
