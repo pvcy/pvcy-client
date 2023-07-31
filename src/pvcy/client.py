@@ -456,10 +456,11 @@ class PvcyClient:
             project_id (str): The UUID for the project that will contain the
                 new or updated job definitions.
             job_definitions (List[NewJobDefinition]): A list of objects containing
-                the new job definition data.
+                the new or updated job definition data.
 
         Returns:
-            JobDefinition: The JobDefinition that was created.
+            list[JobDefinition]: A list of the JobDefinitions that were created or
+            updated.
         """
         # The endpoint requires separate calls for creates and updates, so we split
         # the job_definitions list into two batches, and operate on each batch.
@@ -482,16 +483,15 @@ class PvcyClient:
                     for jd_dict in response_data["job_definitions"]
                 ]
             )
-        if update_jds:
-            for jd in update_jds:
-                assert jd.job_definition_id is not None
-                ret_jds.append(
-                    self.update_job_definition(
-                        project_id=project_id,
-                        job_definition_id=jd.job_definition_id,
-                        job_definition=jd,
-                    )
+        for jd in update_jds:
+            assert jd.job_definition_id is not None
+            ret_jds.append(
+                self.update_job_definition(
+                    project_id=project_id,
+                    job_definition_id=jd.job_definition_id,
+                    job_definition=jd,
                 )
+            )
         return ret_jds
 
     def delete_job_definition(

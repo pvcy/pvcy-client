@@ -311,8 +311,8 @@ def sync(ctx: click.Context, path: Path, only: List[str]) -> None:
         2.  Fetches the latest account state from the PVCY API.
         3.  Merges the config file with the current state (the config
             file takes precedence in any conflicts).
-        4.  Writes the merged config file back to `path`.
-        5.  Updates the account state to match the merged config file.
+        4.  Updates the account state to match the merged config file.
+        5.  Writes the final config back to the file at `path`.
 
     NOTE: It is not possible to delete projects or job definitions using
     this program; sync assumes that projects found in the API and not
@@ -376,22 +376,27 @@ def sync(ctx: click.Context, path: Path, only: List[str]) -> None:
             )
         merged.append(project)
 
-    logging.info(f"Writing merged config to {path}")
-    # TODO: a deep update on raw_config should preserve original order and comments
-    merged = sorted(merged, key=lambda x: (x.project_title, x.project_id))
-    new_config = ConfigFile(version=CONFIG_FILE_VERSION, projects=merged)
-    with open(path, "w") as f:
-        yaml_serializer.dump(new_config.model_dump(mode="json"), f)
-
     if config.projects and merged:
         logging.info("Updating account state from config file.")
         # can't create projects or update project metadata; just update job definitions
         for project in merged:
             if only and str(project.project_id) not in only:
                 continue
-            pvcy_client.create_or_update_job_definitions(
+            # todo: check to see if project was changed; skip API update if
+            # it is the same
+            newly_updated = pvcy_client.create_or_update_job_definitions(
                 project_id=project.project_id, job_definitions=project.job_definitions
             )
+            project.job_definitions = [
+                NewJobDefinition.from_job_definition(jd) for jd in newly_updated
+            ]
+
+    logging.info(f"Writing merged config to {path}")
+    # TODO: a deep update on raw_config should preserve original order and comments
+    merged = sorted(merged, key=lambda x: (x.project_title, x.project_id))
+    new_config = ConfigFile(version=CONFIG_FILE_VERSION, projects=merged)
+    with open(path, "w") as f:
+        yaml_serializer.dump(new_config.model_dump(mode="json"), f)
     ctx.exit(0)
 
 

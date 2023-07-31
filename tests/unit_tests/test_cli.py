@@ -14,6 +14,7 @@
 
 import re
 import shutil
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, TypeVar, Union
 from uuid import uuid4
@@ -31,6 +32,7 @@ from pvcy.client import PvcyClient
 from pvcy.project_types import (
     ColumnConfig,
     ConfigFile,
+    JobDefinition,
     JobRunType,
     KStrategy,
     NewJobDefinition,
@@ -47,6 +49,26 @@ from .utils import load_response_from_file
 @pytest.fixture
 def test_data_dir() -> Path:
     return Path(__file__).parent.parent / "data"
+
+
+def _job_def_from_new_job_def_json(json_data: Any) -> Any:
+    request_jd = NewJobDefinition(**json_data)
+    return JobDefinition(
+        job_definition_id=request_jd.job_definition_id or uuid4(),
+        origin_namespace=None,
+        origin_table=request_jd.table_name,
+        destination_namespace=None,
+        destination_table=request_jd.table_name,
+        k_strategy=request_jd.k_strategy,
+        k_target=request_jd.k_target,
+        enabled=request_jd.enabled if request_jd.enabled is not None else True,
+        job_run_type=request_jd.job_run_type or JobRunType.LOAD_TREAT_WRITE,
+        created=datetime.now(tz=timezone.utc),
+        updated=datetime.now(tz=timezone.utc),
+        column_config=request_jd.column_config,
+        celery_schedule_id=uuid4() if request_jd.schedule else None,
+        schedule=request_jd.schedule,
+    ).model_dump(mode="json")
 
 
 class MockPvcyClient(PvcyClient):
@@ -71,17 +93,21 @@ class MockPvcyClient(PvcyClient):
         elif endpoint == "/v1/connections":
             return load_response_from_file("responses/get_connection.json")
         elif re.match(r"/v1/projects/([a-f0-9-]{36})/job_definitions", endpoint):
-            return load_response_from_file("responses/get_job_definition.json")
+            return {"job_definition": _job_def_from_new_job_def_json(json_data)}
         elif re.match(
             r"/v1/projects/([a-f0-9-]{36})/job_definitions:batch_create", endpoint
         ):
-            return load_response_from_file("responses/get_job_definitions.json")
+            return {
+                "job_definitions": [
+                    _job_def_from_new_job_def_json(jd) for jd in json_data
+                ]
+            }
         else:
             raise NotImplementedError("Mock endpoint not implemented")
 
     def _put(self, endpoint: str, json_data: Any) -> Dict[str, Any]:
         if re.match(r"/v1/projects/([a-f0-9-]{36})/job_definitions", endpoint):
-            return load_response_from_file("responses/get_job_definition.json")
+            return {"job_definition": _job_def_from_new_job_def_json(json_data)}
         else:
             raise NotImplementedError(
                 f"Mock endpoint not implemented for _put {endpoint}"
