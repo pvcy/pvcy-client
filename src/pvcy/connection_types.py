@@ -17,7 +17,15 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Type, Union
 
-from pydantic import UUID4, AliasChoices, BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    UUID4,
+    AliasChoices,
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 
 class ConnectionType(Enum):
@@ -207,10 +215,12 @@ class SftpConnection(_SftpBase, _ExistingConnectionMixIn, _OptionalPasswordMixin
 
 
 class NewSftpConnection(_SftpBase, _OptionalPasswordMixin, _OptionalPrivateKeyMixin):
-    @model_validator(mode='after')
-    def check_password_or_pk(self) -> 'NewSftpConnection':
+    @model_validator(mode="after")
+    def check_password_or_pk(self) -> "NewSftpConnection":
         if self.password is None and self.private_key is None:
-            raise ValueError("Must provide either a password or private key.")
+            raise ValueError("Must provide either a password or a private key.")
+        elif self.password is not None and self.private_key is not None:
+            raise ValueError("Cannot provide both a password and a private key.")
         return self
 
 

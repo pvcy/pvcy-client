@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pvcy.connection_types import connection_factory
+from typing import Union
+
+import pytest
+from pvcy.connection_types import ConnectionType, NewSftpConnection, connection_factory
 from pvcy.project_types import (
     JobDefinition,
+    JobRunType,
+    KStrategy,
     NewJobDefinition,
     Project,
     ProjectConfig,
 )
+from pydantic import ValidationError
 
 from .utils import load_response_from_file
 
@@ -28,6 +34,20 @@ def test_connections_validate() -> None:
     connections = response["connections"]
     for c in connections:
         connection_factory(c)
+
+
+@pytest.mark.parametrize("pw,pk", [(None, None), ("foo", "bar")])
+def test_sftp_requires_pw_or_pk(pw: Union[str, None], pk: Union[str, None]) -> None:
+    with pytest.raises(ValidationError):
+        _ = NewSftpConnection(
+            input_type=ConnectionType.SFTP,
+            connection_name="foo",
+            host="localhost",
+            port=22,
+            username="bar",
+            password=pw,
+            private_key=pk,
+        )
 
 
 def test_projects_validate() -> None:
@@ -47,6 +67,23 @@ def test_job_definition_validates() -> None:
     response = load_response_from_file("responses/get_job_definition.json")
     jd = response["job_definition"]
     JobDefinition(**jd)
+
+
+def test_job_definition_requires_k() -> None:
+    with pytest.raises(ValidationError):
+        _ = NewJobDefinition(
+            table_name="foo",
+            job_run_type=JobRunType.LOAD_TREAT_WRITE,
+            k_strategy=None,
+            k_target=2,
+        )
+    with pytest.raises(ValidationError):
+        _ = NewJobDefinition(
+            table_name="foo",
+            job_run_type=JobRunType.LOAD_TREAT_WRITE,
+            k_strategy=KStrategy.ANONYMIZE,
+            k_target=None,
+        )
 
 
 def test_new_job_definition_from_job_definition() -> None:

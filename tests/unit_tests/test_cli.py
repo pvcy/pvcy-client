@@ -17,7 +17,7 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, TypeVar, Union
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 import yaml
@@ -354,7 +354,20 @@ def test_export(mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path) -> 
         raise e from None
 
 
-def test_sync_noop(mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path) -> None:
+@pytest.mark.parametrize(
+    "only",
+    [
+        [],
+        ["bf2f4075-7119-43c3-abe0-b2737b83594a"],
+        [
+            "bf2f4075-7119-43c3-abe0-b2737b83594a",
+            "f5188f24-6342-4b26-bba2-f7e9ce339b9c",
+        ],
+    ],
+)
+def test_sync_noop(
+    mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path, only: List[str]
+) -> None:
     test_file = test_data_dir / "config" / "exported.yml"
     with open(test_file, "r") as f:
         expected_contents = f.read()
@@ -362,7 +375,11 @@ def test_sync_noop(mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path) 
     p = tmp_path / "sync.yml"
     shutil.copy(test_file, p)
     runner = CliRunner()
-    result = runner.invoke(pvcy, args=["sync", str(p.as_posix())])
+    args = ["sync", str(p.as_posix())]
+    for project_id in only:
+        args.append("--only")
+        args.append(project_id)
+    result = runner.invoke(pvcy, args=args)
     assert result.exit_code == 0
     with open(p, "r") as f:
         raw_contents = f.read()
@@ -389,8 +406,9 @@ def test_sync_missing_partial(
     assert raw_contents == expected_contents
 
 
+@pytest.mark.parametrize("only", [([]), (["bf2f4075-7119-43c3-abe0-b2737b83594a"])])
 def test_sync_new_job_defs(
-    mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path
+    mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path, only: List[str]
 ) -> None:
     test_file = test_data_dir / "config" / "different_first_project.yml"
     exported_file = test_data_dir / "config" / "exported.yml"
@@ -398,7 +416,11 @@ def test_sync_new_job_defs(
     p = tmp_path / "sync.yml"
     shutil.copy(test_file, p)
     runner = CliRunner()
-    result = runner.invoke(pvcy, args=["sync", str(p.as_posix())])
+    args = ["sync", str(p.as_posix())]
+    for project_id in only:
+        args.append("--only")
+        args.append(project_id)
+    result = runner.invoke(pvcy, args=args)
     assert result.exit_code == 0
     with open(p, "r") as f:
         contents = yaml.safe_load(f)
@@ -416,11 +438,36 @@ def test_sync_new_job_defs(
         actual_config.projects[0].project_id == exported_config.projects[0].project_id
     )
     assert actual_config.projects[0] != exported_config.projects[0]
-    assert actual_config.projects[1:] == exported_config.projects[1:]
+    if not only:
+        assert actual_config.projects[1:] == exported_config.projects[1:]
+    else:
+        assert actual_config.projects[1:] == test_file_config.projects[1:]
 
 
-# todo: test --only
-# todo: test new projects (cfg only warning)
+def test_sync_cfg_only_project(
+    mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path
+) -> None:
+    test_file = test_data_dir / "config" / "extra_project.yml"
+    exported_file = test_data_dir / "config" / "exported.yml"
+    with open(exported_file, "r") as f:
+        expected_contents = f.read()
+
+    p = tmp_path / "sync.yml"
+    shutil.copy(test_file, p)
+    runner = CliRunner()
+    args = ["sync", str(p.as_posix())]
+    result = runner.invoke(pvcy, args=args)
+    assert result.exit_code == 0
+    with open(p, "r") as f:
+        raw_contents = f.read()
+    assert raw_contents == expected_contents
+
+    # confirm that backup file created and matches original
+    with open(p.with_stem(f"{p.stem}__backup")) as f:
+        backup_contents = f.read()
+    with open(test_file, "r") as f:
+        test_file_contents = f.read()
+    assert backup_contents == test_file_contents
 
 
 def test_copy(mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path) -> None:
@@ -431,12 +478,15 @@ def test_copy(mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path) -> No
     p = tmp_path / "copy.yml"
     shutil.copy(test_file, p)
     runner = CliRunner()
-    source_id = "c132b205-4d88-47c8-af4d-884d8f17df15"
+    source_id = UUID("c132b205-4d88-47c8-af4d-884d8f17df15")
     dest_ids = [
-        "47332635-c555-496a-b20b-303914e9230c",
-        "105d0358-cb82-4549-a93d-33d436a6118b",
+        UUID("47332635-c555-496a-b20b-303914e9230c"),
+        UUID("105d0358-cb82-4549-a93d-33d436a6118b"),
     ]
-    result = runner.invoke(pvcy, args=["copy", str(p.as_posix()), source_id, *dest_ids])
+    result = runner.invoke(
+        pvcy,
+        args=["copy", str(p.as_posix()), str(source_id), *[str(d) for d in dest_ids]],
+    )
     assert result.exit_code == 0
 
     with open(p, "r") as f:
@@ -450,19 +500,17 @@ def test_copy(mock_pvcy_client: None, tmp_path: Path, test_data_dir: Path) -> No
 
     assert len(actual_config.projects) == len(test_file_config.projects)
 
-    actual_project_ids = [str(p.project_id) for p in actual_config.projects]
+    actual_project_ids = [p.project_id for p in actual_config.projects]
     assert source_id in actual_project_ids
     assert all([dest_id in actual_project_ids for dest_id in dest_ids])
 
-    [source_project] = [
-        p for p in actual_config.projects if str(p.project_id) == source_id
-    ]
+    [source_project] = [p for p in actual_config.projects if p.project_id == source_id]
     assert [source_project] == [
-        p for p in test_file_config.projects if str(p.project_id) == source_id
+        p for p in test_file_config.projects if p.project_id == source_id
     ]
-    dest_projects = [p for p in actual_config.projects if str(p.project_id) in dest_ids]
+    dest_projects = [p for p in actual_config.projects if p.project_id in dest_ids]
     assert dest_projects != [
-        p for p in test_file_config.projects if str(p.project_id) in dest_ids
+        p for p in test_file_config.projects if p.project_id in dest_ids
     ]
 
     for dest_proj in dest_projects:

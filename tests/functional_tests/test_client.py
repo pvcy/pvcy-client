@@ -35,7 +35,7 @@ from pvcy.project_types import (
 )
 from requests import HTTPError
 
-TEST_PROJECT_ID = "87d3f199-4f74-4062-88ad-3c75cb406501"
+TEST_PROJECT_ID = os.getenv("TEST_PROJECT_ID", "87d3f199-4f74-4062-88ad-3c75cb406501")
 
 
 @pytest.fixture(scope="session")

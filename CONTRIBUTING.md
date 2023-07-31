@@ -1,7 +1,6 @@
 # Contributing
 
-This project is maintained by Privacy Dynamics. Issues and Pull Requests
-are welcome from external contributors.
+This project is maintained by Privacy Dynamics. Issues are welcome from external contributors.
 
 ## Building this Project
 This project is in Python and is built using Poetry.
@@ -19,7 +18,7 @@ This project is in Python and is built using Poetry.
     PVCY_CLIENT_ID=<redacted>
     PVCY_CLIENT_SECRET=<redacted>
     PVCY_AUDIENCE=https://api.privacydynamics.io
-    PVCY_BASE_URL=https://api.test.privacydynamics.io
+    PVCY_BASE_URL=<redacted>
     PVCY_IDP_DOMAIN=https://auth.privacydynamics.io
     SNOWFLAKE_ACCOUNT=<redacted>
     SNOWFLAKE_PASSWORD=<redacted>
