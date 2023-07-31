@@ -17,7 +17,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Union
 
-from pydantic import UUID4, ConfigDict, Field, field_validator
+from pydantic import UUID4, ConfigDict, Field, field_validator, model_validator
 
 from pvcy.connection_types import PvcyBaseModel, SimpleConnection
 
@@ -78,7 +78,7 @@ class PiiClass(Enum):
 
 
 class ColumnConfig(PvcyBaseModel):
-    treatment_method: TreatmentMethod
+    treatment_method: Union[TreatmentMethod, None] = None
     pii_class: Union[PiiClass, None] = None
 
 
@@ -102,6 +102,16 @@ class NewJobDefinition(PvcyBaseModel):
     k_target: Union[int, None] = None
     schedule: Union[str, None] = None
     column_config: Union[Dict[str, ColumnConfig], None] = None
+
+    @model_validator(mode="after")
+    def treat_needs_k_fields(self) -> "NewJobDefinition":
+        if self.job_run_type and self.job_run_type is JobRunType.LOAD_TREAT_WRITE:
+            if self.k_strategy is None or self.k_target is None:
+                raise ValueError(
+                    "Job definitions with a LOAD_TREAT_WRITE strategy require a "
+                    "k_strategy and k_target."
+                )
+        return self
 
     @classmethod
     def from_job_definition(
