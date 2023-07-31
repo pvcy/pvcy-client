@@ -7,7 +7,7 @@ enabled.
 ## Installation
 
 ```sh
-pip install pvcy-client
+pip install git+https://github.com/pvcy/pvcy-client.git@main
 ```
 
 ## Getting Started
@@ -21,7 +21,7 @@ pip install pvcy-client
     client when it is initialized. One of the easiest ways to do this is to
     create a `.env` file with the following keys:
     ```sh
-    PVCY_BASE_URL=<your base URL> # default: https://api.test.privacydynamics.io
+    PVCY_BASE_URL=<your base URL> # default: https://api.privacydynamics.io
     PVCY_CLIENT_ID=<your Client ID>
     PVCY_CLIENT_SECRET=<your Client Secret>
     PVCY_AUDIENCE=<your Audience or Base URL> # default: https://api.privacydynamics.io
