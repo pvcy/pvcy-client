@@ -17,7 +17,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Type, Union
 
-from pydantic import UUID4, AliasChoices, BaseModel, ConfigDict, Field, field_validator
+from pydantic import UUID4, AliasChoices, BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class ConnectionType(Enum):
@@ -78,7 +78,7 @@ class _PrivateKeyMixin(PvcyBaseModel):
 
 class _HostPortMixin(PvcyBaseModel):
     host: str
-    port: str
+    port: int
 
 
 class SshConnection(_HostPortMixin, _OptionalPrivateKeyMixin):
@@ -206,8 +206,12 @@ class SftpConnection(_SftpBase, _ExistingConnectionMixIn, _OptionalPasswordMixin
     pass
 
 
-class NewSftpConnection(_SftpBase, _PasswordMixin):
-    pass
+class NewSftpConnection(_SftpBase, _OptionalPasswordMixin, _OptionalPrivateKeyMixin):
+    @model_validator(mode='after')
+    def check_password_or_pk(self) -> 'NewSftpConnection':
+        if self.password is None and self.private_key is None:
+            raise ValueError("Must provide either a password or private key.")
+        return self
 
 
 Connection = Union[

@@ -150,6 +150,7 @@ class NameSpace(PvcyBaseModel):
     dataset: Union[str, None] = None
     prefix: Union[str, None] = None
     bucket: Union[str, None] = None
+    directory: Union[str, None] = None
 
 
 class JobDefinition(PvcyBaseModel):
@@ -167,7 +168,7 @@ class JobDefinition(PvcyBaseModel):
     created_at: Union[datetime, None] = Field(None, alias="created")
     updated_at: Union[datetime, None] = Field(None, alias="updated")
     column_config: Union[Dict[str, ColumnConfig], None]
-    celery_schedule_id: Union[str, None] = None
+    celery_schedule_id: Union[UUID4, None] = None
     schedule: Union[str, None] = None
     # Fields excluded due to planned future API changes
     # assessment: Union[Assessment, None] = None

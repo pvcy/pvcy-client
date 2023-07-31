@@ -122,6 +122,16 @@
             "port": "5432",
             "updated": 1641831667,
             "username": "svc_pvcy"
+        },
+        {
+            "connection_id":"8a4cf9c4-18e0-4c39-b945-b9c662a5e029",
+            "connection_name":"Test SFTP server",
+            "created":1690732048,
+            "host":"11.222.333.123",
+            "input_type":"sftp",
+            "port":22,
+            "updated":1690732048,
+            "username":"svc_pvcy"
         }
     ],
     "request_id": "594e61c1080770640eb2e35dc6e9d6c4",
