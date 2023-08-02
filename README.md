@@ -1,8 +1,11 @@
 # pvcy-client: A Python Client for the Privacy Dynamics API
 
-This project provides a Python Client for the Privacy Dynamics API. To
+This project provides a reference implementation ("sample") Python Client for the Privacy Dynamics API. To
 use this client, you will need a Privacy Dynamics account with API access
 enabled.
+
+## Experimental and Unsupported
+This is a sample project that pushes the envelope on a few API features and may not be maintained as the API evolves. It is not officially supported at the same level as the rest of the Privacy Dynamics product. Please [reach out](mailto:support@privacydynamics.io) if you are interested in this client, so we can advise you on its current status.
 
 ## Installation
 
